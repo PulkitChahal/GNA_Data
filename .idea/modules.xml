@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GNA_Energy_Data.iml" filepath="$PROJECT_DIR$/.idea/GNA_Energy_Data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Data Insights/.idea/Data Insights.iml" filepath="$PROJECT_DIR$/../Data Insights/.idea/Data Insights.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/GNA Data.iml" filepath="$PROJECT_DIR$/.idea/GNA Data.iml" />
     </modules>
   </component>
 </project>

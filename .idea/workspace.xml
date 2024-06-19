@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b21fc90-b4f0-47a9-98d3-9d330afc887a" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/Data_Upload/chart_for_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/coal_data_npp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/data_mapping.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/deep_portal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/deep_tam_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/hpx_reverse_auction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/hydro_npp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/iex_reverse_auction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/outage_npp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/plant_plf_monthly.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/pxil_reverse_auction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/tam_revrese_auction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/trader_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data_Upload/uttarakhand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="6e1322a1-d93c-4092-8176-cf122f77cb80" name="Changes" comment="update data files" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PUSH_TAGS">
@@ -42,14 +39,15 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/PulkitChahal/GNA_Energy_Data.git&quot;,
-    &quot;accountId&quot;: &quot;64d2b0a3-98c4-4bb1-9510-1a6d8eeeb8ad&quot;
+    &quot;url&quot;: &quot;https://github.com/PulkitChahal/GNA_Energy.git&quot;,
+    &quot;accountId&quot;: &quot;c9242038-e5fc-4634-92aa-232f1f5d01d3&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 6
+  &quot;customColor&quot;: &quot;177097ff&quot;,
+  &quot;associatedIndex&quot;: 3
 }</component>
-  <component name="ProjectId" id="2i5Ugqw5XiP7RXbO8nUgEMaORJO" />
+  <component name="ProjectId" id="2gDejULMdQfj7KClWGMmvYo7f1t" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -57,46 +55,223 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/GNA",
-    "settings.editor.selected.configurable": "preferences.editor"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Python.chart_for_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.coal_data_npp.executor&quot;: &quot;Run&quot;,
+    &quot;Python.constants.executor&quot;: &quot;Run&quot;,
+    &quot;Python.convert_xlsx_to_xlsx.executor&quot;: &quot;Run&quot;,
+    &quot;Python.data_extract.executor&quot;: &quot;Run&quot;,
+    &quot;Python.database_deep.executor&quot;: &quot;Run&quot;,
+    &quot;Python.deep_portal.executor&quot;: &quot;Run&quot;,
+    &quot;Python.deep_tam_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.hpx_reverse_auction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.hydro_npp.executor&quot;: &quot;Run&quot;,
+    &quot;Python.iex_reverse_auction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.outage_npp.executor&quot;: &quot;Run&quot;,
+    &quot;Python.plant_plf_monthly.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pxil_reverse_auction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tam_revrese_auction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.uttarakhand.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/GNA&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-5b207ade9991-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17890.14" />
+        <option value="bundled-python-sdk-babbdf50b680-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.15989.155" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8b21fc90-b4f0-47a9-98d3-9d330afc887a" name="Changes" comment="" />
-      <created>1718780045748</created>
+      <changelist id="6e1322a1-d93c-4092-8176-cf122f77cb80" name="Changes" comment="" />
+      <created>1715236710883</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1718780045748</updated>
+      <updated>1715236710883</updated>
     </task>
-    <task id="LOCAL-00001" summary="first commit">
+    <task id="LOCAL-00001" summary="First Commit">
       <option name="closed" value="true" />
-      <created>1718780111107</created>
+      <created>1715762989377</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1718780111107</updated>
+      <updated>1715762989377</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="First Commit">
+      <option name="closed" value="true" />
+      <created>1715771715179</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1715771715179</updated>
+    </task>
+    <task id="LOCAL-00003" summary="First Commit">
+      <option name="closed" value="true" />
+      <created>1716511665952</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1716511665952</updated>
+    </task>
+    <task id="LOCAL-00004" summary="First Commit">
+      <option name="closed" value="true" />
+      <created>1717561981137</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1717561981137</updated>
+    </task>
+    <task id="LOCAL-00005" summary="First Commit">
+      <option name="closed" value="true" />
+      <created>1718100973260</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1718100973260</updated>
+    </task>
+    <task id="LOCAL-00006" summary="First Commit">
+      <option name="closed" value="true" />
+      <created>1718101051763</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1718101051763</updated>
+    </task>
+    <task id="LOCAL-00007" summary="First Commit">
+      <option name="closed" value="true" />
+      <created>1718191065064</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1718191065064</updated>
+    </task>
+    <task id="LOCAL-00008" summary="recent update">
+      <option name="closed" value="true" />
+      <created>1718697639811</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1718697639811</updated>
+    </task>
+    <task id="LOCAL-00009" summary="update data files">
+      <option name="closed" value="true" />
+      <created>1718777269035</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1718777269035</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
+    <MESSAGE value="First Commit" />
+    <MESSAGE value="recent update" />
+    <MESSAGE value="update data files" />
+    <option name="LAST_COMMIT_MESSAGE" value="update data files" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>14</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>4</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>10</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>36</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>33</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>22</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>20</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>18</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>8</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Daily Upload/data_mapping.py</url>
+          <line>7</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
