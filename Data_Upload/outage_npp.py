@@ -4,13 +4,13 @@ import os
 from datetime import datetime, timedelta
 import xlwings as xw
 
-main_directory = r'C:\GNA\Coding\Outage'
+main_directory = r'C:\GNA\Data\Outage'
 
 final_directory = r'C:\GNA\Data Upload'
 
 
 def daily_outage_report_thermal_nuclear_units_only_for_500mw():
-	file_path = r'C:\GNA\Coding\Outage\Thermal,Nuclear for 500MW'
+	file_path = r'C:\GNA\Data\Outage\Thermal,Nuclear for 500MW'
 	if os.path.exists(file_path):
 		for file in os.listdir(file_path):
 			file_path_full = os.path.join(file_path, file)
@@ -18,7 +18,7 @@ def daily_outage_report_thermal_nuclear_units_only_for_500mw():
 				os.remove(file_path_full)
 	else:
 		os.makedirs(file_path)
-	output_path = r'C:\GNA\Coding\Outage\Thermal,Nuclear for 500MW Edited'
+	output_path = r'C:\GNA\Data\Outage\Thermal,Nuclear for 500MW Edited'
 	if os.path.exists(output_path):
 		for file in os.listdir(output_path):
 			file_path_full = os.path.join(output_path, file)
@@ -57,7 +57,7 @@ def daily_outage_report_thermal_nuclear_units_only_for_500mw():
 
 
 def daily_outage_report_coal_lignite_nuclear():
-	file_path = r'C:\GNA\Coding\Outage\Coal,Lignite and Nuclear'
+	file_path = r'C:\GNA\Data\Outage\Coal,Lignite and Nuclear'
 	if os.path.exists(file_path):
 		for file in os.listdir(file_path):
 			file_path_full = os.path.join(file_path, file)
@@ -65,7 +65,7 @@ def daily_outage_report_coal_lignite_nuclear():
 				os.remove(file_path_full)
 	else:
 		os.makedirs(file_path)
-	output_path = r'C:\GNA\Coding\Outage\Coal,Lignite and Nuclear Edited'
+	output_path = r'C:\GNA\Data\Outage\Coal,Lignite and Nuclear Edited'
 	if os.path.exists(output_path):
 		for file in os.listdir(output_path):
 			file_path_full = os.path.join(output_path, file)
@@ -104,7 +104,7 @@ def daily_outage_report_coal_lignite_nuclear():
 
 
 def daily_outage_report_hydro_units():
-	file_path = r'C:\GNA\Coding\Outage\Hydro Units'
+	file_path = r'C:\GNA\Data\Outage\Hydro Units'
 	if os.path.exists(file_path):
 		for file in os.listdir(file_path):
 			file_path_full = os.path.join(file_path, file)
@@ -112,7 +112,7 @@ def daily_outage_report_hydro_units():
 				os.remove(file_path_full)
 	else:
 		os.makedirs(file_path)
-	output_path = r'C:\GNA\Coding\Outage\Hydro Units Edited'
+	output_path = r'C:\GNA\Data\Outage\Hydro Units Edited'
 	if os.path.exists(output_path):
 		for file in os.listdir(output_path):
 			file_path_full = os.path.join(output_path, file)

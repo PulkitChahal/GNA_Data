@@ -5,7 +5,7 @@ import pandas as pd
 
 class uttarakhand_generation:
 	def __init__(self):
-		file_directory = r'C:\GNA\Coding\Uttarakhand'
+		file_directory = r'C:\GNA\Data\Uttarakhand'
 		if not os.path.exists(file_directory):
 			os.mkdir(file_directory)
 		self.file_directory = file_directory
@@ -46,10 +46,7 @@ class uttarakhand_generation:
 			df = pd.read_json(json_file)
 			df.to_excel(output_file, index=False)
 			print(f"File saved to '{output_file}'")
-	
-	
-	def find_duplicate_generator(self):
-		pass
+
 	
 	def get_data(self):
 		uttarakhand_generation().get_generators_list()

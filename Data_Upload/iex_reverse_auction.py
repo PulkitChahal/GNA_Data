@@ -13,29 +13,29 @@ import pandas as pd
 from datetime import datetime, timedelta
 from PyPDF2 import PdfReader
 
-file_directory = r'C:\GNA\Coding\Reverse Auction\IEX Reverse Auction'
+file_directory = r'C:\GNA\Data\Reverse Auction\IEX Reverse Auction'
 if not os.path.exists(file_directory):
 	os.makedirs(file_directory)
 
-output_directory_1 = r'C:\GNA\Coding\Reverse Auction\IEX Reverse Auction Table0'
+output_directory_1 = r'C:\GNA\Data\Reverse Auction\IEX Reverse Auction Table0'
 if not os.path.exists(output_directory_1):
 	os.makedirs(output_directory_1)
 
-output_directory_2 = r'C:\GNA\Coding\Reverse Auction\IEX Reverse Auction Table1'
+output_directory_2 = r'C:\GNA\Data\Reverse Auction\IEX Reverse Auction Table1'
 if not os.path.exists(output_directory_2):
 	os.makedirs(output_directory_2)
 
-output_directory_3 = r'C:\GNA\Coding\Reverse Auction\IEX Reverse Auction Table2'
+output_directory_3 = r'C:\GNA\Data\Reverse Auction\IEX Reverse Auction Table2'
 if not os.path.exists(output_directory_3):
 	os.makedirs(output_directory_3)
 
-main_directory = r'C:\GNA\Coding\Reverse Auction'
+main_directory = r'C:\GNA\Data\Reverse Auction'
 
 final_directory = r'C:\GNA\Data Upload'
 
-error_log_file_0 = r'C:\GNA\Coding\Reverse Auction\error_log_iex_table0.xlsx'
-error_log_file_1 = r'C:\GNA\Coding\Reverse Auction\error_log_iex_table1.xlsx'
-error_log_file_2 = r'C:\GNA\Coding\Reverse Auction\error_log_iex_table2.xlsx'
+error_log_file_0 = r'C:\GNA\Data\Reverse Auction\error_log_iex_table0.xlsx'
+error_log_file_1 = r'C:\GNA\Data\Reverse Auction\error_log_iex_table1.xlsx'
+error_log_file_2 = r'C:\GNA\Data\Reverse Auction\error_log_iex_table2.xlsx'
 
 month_replacements = {
 	'January': '01-', 'Jan': '01-',
@@ -69,7 +69,7 @@ class iex_reverse_auction():
 		for attempt in range(retry_count):
 			try:
 				options = Options()
-				prefs = {'download.default_directory': r'C:\GNA\Coding\Reverse Auction\IEX Reverse Auction'}
+				prefs = {'download.default_directory': file_directory}
 				options.add_experimental_option('prefs', prefs)
 				chromedriver_path = r'C:\Users\pulki\.cache\selenium\chromedriver\win64\125.0.6422.76\chromedriver.exe'
 				driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)

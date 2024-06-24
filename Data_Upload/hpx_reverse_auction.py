@@ -11,24 +11,29 @@ import pandas as pd
 from PyPDF2 import PdfReader
 import re
 
-main_directory = r'C:\GNA\Coding\Reverse Auction'
+main_directory = r'C:\GNA\Data\Reverse Auction'
 
-file_directory = r'C:\GNA\Coding\Reverse Auction\HPX Reverse Auction'
-# if os.path.exists(file_directory):
-# 	for file in os.listdir(file_directory):
-# 		file_path_full = os.path.join(file_directory, file)
-# 		if os.path.isfile(file_path_full):
-# 			os.remove(file_path_full)
-# else:
-# 	os.makedirs(file_directory)
+file_directory = r'C:\GNA\Data\Reverse Auction\HPX Reverse Auction'
+if os.path.exists(file_directory):
+	for file in os.listdir(file_directory):
+		file_path_full = os.path.join(file_directory, file)
+		if os.path.isfile(file_path_full):
+			os.remove(file_path_full)
+else:
+	os.makedirs(file_directory)
 
-output_directory = r'C:\GNA\Coding\Reverse Auction\HPX Reverse Auction xlsx Files'
-if not os.path.exists(output_directory):
+output_directory = r'C:\GNA\Data\Reverse Auction\HPX Reverse Auction xlsx Files'
+if os.path.exists(output_directory):
+	for file in os.listdir(output_directory):
+		file_path_full = os.path.join(output_directory, file)
+		if os.path.isfile(file_path_full):
+			os.remove(file_path_full)
+else:
 	os.makedirs(output_directory)
 
 final_directory = r'C:\GNA\Data Upload'
 
-error_log_file = r'C:\GNA\Coding\Reverse Auction\hpx_pdf_not_converted.xlsx'
+error_log_file = r'C:\GNA\Data\Reverse Auction\hpx_pdf_not_converted.xlsx'
 
 month_replacements = {
 	'January': '01', 'Jan': '01',
@@ -85,7 +90,7 @@ class hpx_reverse_auction():
 	
 	def get_pdf_files_url(self):
 		options = Options()
-		prefs = {'download.default_directory': r'C:\GNA\Coding\Reverse Auction\HPX Reverse Auction'}
+		prefs = {'download.default_directory': r'C:\GNA\Data\Reverse Auction\HPX Reverse Auction'}
 		if not os.path.exists(prefs['download.default_directory']):
 			os.makedirs(prefs['download.default_directory'])
 		options.add_experimental_option("prefs", prefs)
@@ -107,8 +112,8 @@ class hpx_reverse_auction():
 		df.to_excel(file_name_file_path, index=False)
 		links = table_find.find_elements(By.TAG_NAME, 'a')
 		
-		# for i, link in enumerate(links[:10]):
-		for link in links:
+		for i, link in enumerate(links[:10]):
+		# for link in links:
 			href = link.get_attribute('href')
 			filename = href.split('/')[-1]
 			print(filename)
@@ -340,8 +345,8 @@ class hpx_reverse_auction():
 			print("No data to merge.")
 	
 	def merge_final_files(self):
-		file_1 = r"C:\GNA\Coding\Reverse Auction\merged_file_hpx.xlsx"
-		file_2 = r"C:\GNA\Coding\Reverse Auction\table_data.xlsx"
+		file_1 = r"C:\GNA\Data\Reverse Auction\merged_file_hpx.xlsx"
+		file_2 = r"C:\GNA\Data\Reverse Auction\table_data.xlsx"
 		
 		df1 = pd.read_excel(file_1)
 		df2 = pd.read_excel(file_2)
@@ -370,7 +375,6 @@ class hpx_reverse_auction():
 			'Delivery End Date',
 			'Delivery Start Time',
 			'Delivery End Time',
-			'Auction Type',
 			'Requisitioned/Requested Quantity (in MW)',
 			'Minimum Requisitioned/Requested Quantity (in MW)',
 			'Type',

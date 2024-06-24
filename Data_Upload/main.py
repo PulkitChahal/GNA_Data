@@ -15,7 +15,7 @@ class daily_data_update:
 	
 	def get_data(self):
 		hydro_npp.get_data()
-		outage_npp.get_data()
+		# outage_npp.get_data()
 		coal_data_npp.coal_npp().get_data()
 		deep_portal.deep_portal().get_data()
 		# pxil_reverse_auction.pxil_reverse_auction().get_data()

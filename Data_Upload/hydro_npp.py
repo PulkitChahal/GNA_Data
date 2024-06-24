@@ -5,15 +5,15 @@ import xlwings as xw
 import pandas as pd
 import shutil
 
-main_directory = r'C:\GNA\Coding\Hydro Level'
+main_directory = r'C:\GNA\Data\Hydro Level'
 
-file_directory = r'C:\GNA\Coding\Hydro Level\Downloaded Files'
+file_directory = r'C:\GNA\Data\Hydro Level\Downloaded Files'
 
-output_directory = r'C:\GNA\Coding\Hydro Level\Edited xlsx Files'
+output_directory = r'C:\GNA\Data\Hydro Level\Edited xlsx Files'
 
 final_directory = r'C:\GNA\Data Upload'
 
-error_log_file = r'C:\GNA\Coding\Hydro Level\error_files.xlsx'
+error_log_file = r'C:\GNA\Data\Hydro Level\error_files.xlsx'
 
 
 def convert_xls_to_xlsx(file_path):
@@ -36,7 +36,7 @@ def convert_xls_to_xlsx(file_path):
 
 
 def hydro_level_data():
-	file_path = r'C:\GNA\Coding\Hydro Level\Downloaded Files'
+	file_path = r'C:\GNA\Data\Hydro Level\Downloaded Files'
 	if os.path.exists(file_path):
 		for file in os.listdir(file_path):
 			file_path_full = os.path.join(file_path, file)
@@ -45,7 +45,7 @@ def hydro_level_data():
 	else:
 		os.makedirs(file_path)
 	
-	output_directory = r'C:\GNA\Coding\Hydro Level\Edited xlsx Files'
+	output_directory = r'C:\GNA\Data\Hydro Level\Edited xlsx Files'
 	if os.path.exists(output_directory):
 		for file in os.listdir(output_directory):
 			file_path_full = os.path.join(output_directory, file)

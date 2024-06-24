@@ -8,27 +8,25 @@ from datetime import datetime, timedelta
 import openpyxl
 from openpyxl.utils import column_index_from_string
 
-file_directory = r'C:\GNA\Coding\Coal Data\Download Files'
-output_directory = r'C:\GNA\Coding\Coal Data\edited_xlsx_files'
-main_directory = r'C:\GNA\Coding\Coal Data'
-error_log_file = r'C:\GNA\Coding\Coal Data\error_log.xlsx'
-
 
 class coal_npp:
 	def __init__(self):
 		self.final_directory = r'C:\GNA\Data Upload'
+		self.file_directory = r'C:\GNA\Data\Coal Data\Download Files'
+		self.output_directory = r'C:\GNA\Data\Coal Data\edited_xlsx_files'
+		self.main_directory = r'C:\GNA\Data\Coal Data'
+		self.error_log_file = r'C:\GNA\Data\Coal Data\error_log.xlsx'
 		pass
-	
+
 	def coal_data_download(self):
-		file_directory = r'C:\GNA\Coding\Coal Data\Download Files'
-		if os.path.exists(file_directory):
-			for file in os.listdir(file_directory):
-				file_path_full = os.path.join(file_directory, file)
+		if os.path.exists(self.file_directory):
+			for file in os.listdir(self.file_directory):
+				file_path_full = os.path.join(self.file_directory, file)
 				if os.path.isfile(file_path_full):
 					os.remove(file_path_full)
 		else:
-			os.makedirs(file_directory)
-		
+			os.makedirs(self.file_directory)
+
 		base_date = datetime.now()
 		# end_date = datetime(2019, 1, 1)
 		end_date = base_date - timedelta(20)
@@ -36,48 +34,47 @@ class coal_npp:
 		while base_date > end_date:
 			start_date = base_date.strftime('%d-%m-%Y')
 			start_date_2 = base_date.strftime('%Y-%m-%d')
-			
+
 			url = f'https://npp.gov.in/public-reports/cea/daily/fuel/{start_date}/dailyCoal1-{start_date_2}.xlsx'
 			response = requests.get(url)
-			
+
 			if response.status_code == 200:
-				with open(os.path.join(file_directory, f'Coal Data-{start_date_2}.xlsx'), 'wb') as f:
+				with open(os.path.join(self.file_directory, f'Coal Data-{start_date_2}.xlsx'), 'wb') as f:
 					f.write(response.content)
-				
+
 				print(f"Downloaded data for date: {start_date_2}")
 			else:
 				print(f"No data available for date: {start_date_2}")
-			
+
 			base_date -= timedelta(days=1)
-		
+
 		if base_date == end_date:
 			print("Reached end date. Exiting loop.")
-	
+
 	def edit_xlsx_file_using_pandas(self):
-		output_directory = r'C:\GNA\Coding\Coal Data\edited_xlsx_files'
-		if os.path.exists(output_directory):
-			for file in os.listdir(output_directory):
-				file_path_full = os.path.join(output_directory, file)
+		if os.path.exists(self.output_directory):
+			for file in os.listdir(self.output_directory):
+				file_path_full = os.path.join(self.output_directory, file)
 				if os.path.isfile(file_path_full):
 					os.remove(file_path_full)
 		else:
-			os.makedirs(output_directory)
-			
+			os.makedirs(self.output_directory)
+
 		error_files = []
 		xlsx_files = []
-		for file in os.listdir(file_directory):
+		for file in os.listdir(self.file_directory):
 			if file.endswith('.xlsx') and file.__contains__('Coal Data'):
 				xlsx_files.append(file)
-		
+
 		for xlsx_file in xlsx_files:
-			file_path = os.path.join(file_directory, xlsx_file)
-			output_file = os.path.join(output_directory, os.path.splitext(os.path.basename(xlsx_file))[0] + '.xlsx')
+			file_path = os.path.join(self.file_directory, xlsx_file)
+			output_file = os.path.join(self.output_directory, os.path.splitext(os.path.basename(xlsx_file))[0] + '.xlsx')
 			print(xlsx_file)
 			# df = openpyxl.load_workbook(file_path)
 			df = pd.read_excel(file_path, engine='openpyxl')
 			region_row_index = None
 			region_column_index = None
-			
+
 			# Find the row and column containing 'Region' values
 			for index, row in df.iterrows():
 				for column in df.columns:
@@ -96,9 +93,9 @@ class coal_npp:
 				print("Region data indexed successfully.")
 			else:
 				print("No 'Region' or 'Sl No.' values found.")
-			
+
 			print(df.iloc[1, 0])
-			
+
 			if df.iloc[1, 0] == 1:
 				table_heading = df.iloc[0]
 				df = df.iloc[1:]
@@ -116,15 +113,15 @@ class coal_npp:
 						combined_row.append(f'{value1}')
 					else:
 						combined_row.append(f'{value1} {value2}')
-				
+
 				df.iloc[0] = combined_row
 				table_heading = df.iloc[0]
 				df = df.iloc[1:]
 				df.columns = table_heading
-			
+
 			df.to_excel(output_file, index=False)
 			df = pd.read_excel(output_file)
-			
+
 			# Iterate over columns and rename them based on conditions
 			for col in df.columns:
 				if col.startswith('Receipt of the day'):
@@ -175,13 +172,13 @@ class coal_npp:
 					df = df.rename(columns={col: "Actual Stock as % of Normative Stock"})
 				elif col.startswith("Indigenous/ Import  Stock (In '000 Tonnes')"):
 					df = df.rename(columns={col: "Actual Stock (Indigenous/ Import) (In '000 Tonnes)"})
-			
+
 			df.to_excel(output_file, index=False)
 			df = pd.read_excel(output_file)
-			
+
 			region_row_index = None
 			region_column_index = None
-			
+
 			for index, row in df.iterrows():
 				for column in df.columns:
 					if isinstance(row[column], str) and (
@@ -194,16 +191,16 @@ class coal_npp:
 						break
 				if region_row_index is not None:
 					break
-			
+
 			if region_row_index is not None and region_column_index is not None:
 				df = df.iloc[:region_row_index]
 				print("Rows and columns deleted successfully.")
 			else:
 				print("No 'NOTE:' or 'Pithead' values found.")
-			
+
 			# Convert values in column 0 to integers, and handle non-convertible values
 			converted_values = pd.to_numeric(df.iloc[:, 0], errors='coerce')
-			
+
 			# Iterate over the DataFrame and replace integer values with the value from the cell above
 			for index, value in enumerate(df.iloc[:, 0]):
 				if isinstance(value, int):
@@ -255,40 +252,40 @@ class coal_npp:
 			                         'Actual Stock In (\'000 Tonnes\') Indigenous',
 			                         'Actual Stock In (\'000 Tonnes\') Import',
 			                         'Actual Stock In (\'000 Tonnes\') Total']
-			
+
 			# Iterate over the columns and round the values if the column exists
 			for col in columns_to_round_by_1:
 				if col in df.columns:
 					df[col] = pd.to_numeric(df[col], errors='coerce')
 					df[col] = df[col].round(decimals=2)
-			
+
 			if 'Region/State' in df.columns:
 				df['Region/State'] = df['Region/State'].astype(str)
 				df = df[~df['Region/State'].str.contains('1', na=False)]
-				
+
 				if 'Region/State' in df.columns:
 					df['Region/State'] = df['Region/State'].apply(lambda x: x.split('/')[1] if '/' in x else x)
-				
+
 				df['Region/State'] = df['Region/State'].replace('nan', '')
 				df['Region/State'] = df['Region/State'].replace('', np.nan)
 				df['Region/State'] = df['Region/State'].fillna(method='ffill')
-				
+
 				columns_to_drop = ["Actual Stock In ('000 Tonnes') Total.3", "Critical (*) (if stock<25%).1",
 				                   "Reasons for critical coal stock/Remarks.1"]
 				df.drop(columns=[col for col in columns_to_drop if col in df.columns], inplace=True)
-				
+
 				df = df[df['Date'] != '']
 				df.dropna(axis=1, how='all', inplace=True)
 				df_cleaned = df.dropna(subset=['Region/State', 'Mode of Transport'])
-				
+
 				df_cleaned.to_excel(output_file, index=False)
 				print(f'File Saved at {output_file}')
-	
+
 	def merge_xlsx_file(self):
 		xlsx_files = []
-		for file in os.listdir(output_directory):
+		for file in os.listdir(self.output_directory):
 			if file.endswith('.xlsx'):
-				xlsx_files.append(os.path.join(output_directory, file))
+				xlsx_files.append(os.path.join(self.output_directory, file))
 		
 		merged_df = pd.DataFrame()
 		for file in xlsx_files:
@@ -316,9 +313,9 @@ class coal_npp:
 		print(f"File Edited and Saved to '{merged_file_path}'")
 	
 	def get_data(self):
-		coal_npp.coal_data_download(self)
-		coal_npp.edit_xlsx_file_using_pandas(self)
-		coal_npp.merge_xlsx_file(self)
+		coal_npp().coal_data_download()
+		coal_npp().edit_xlsx_file_using_pandas()
+		coal_npp().merge_xlsx_file()
 		pass
 
 
