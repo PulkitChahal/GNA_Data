@@ -3,7 +3,7 @@ import os
 from itertools import combinations
 from fuzzywuzzy import fuzz
 from openpyxl import load_workbook
-import trader_data_mapping
+import data_mapping
 
 
 class trader_combined:
@@ -23,6 +23,12 @@ class trader_combined:
         df.columns = df.iloc[0]  # Set the first row as column headers
         df = df[1:]  # Skip the header row
 
+        # Ensure 'Start Time (HH:MM)' column is in string format
+        if 'Start Time (HH:MM)' in df.columns:
+            df['Start Time (HH:MM)'] = df['Start Time (HH:MM)'].astype(str)
+            df['End Time (HH:MM)'] = df['End Time (HH:MM)'].astype(str)
+
+
         # Iterate over merged cells and forward fill only those cells
         for merge in ws.merged_cells.ranges:
             min_col, min_row, max_col, max_row = merge.bounds
@@ -36,7 +42,7 @@ class trader_combined:
         # Save the modified DataFrame to an Excel file
         output_file = os.path.join(self.file_directory, 'trader_final.xlsx')
         df.to_excel(output_file, index=False)
-        print(f'File saved')
+        print(f'File saved {output_file}')
 
     def use_ffill_method(self):
         input_file = os.path.join(self.file_directory, 'trader_final.xlsx')
@@ -48,7 +54,7 @@ class trader_combined:
         # Save the modified DataFrame to an Excel file
         output_file = os.path.join(self.file_directory, 'trader_final1.xlsx')
         df.to_excel(output_file, index=False)
-        print(f'File saved')
+        print(f'File saved {output_file}')
 
     def remove_unwanted_characters(self):
         input_file = os.path.join(self.file_directory, 'trader_final1.xlsx')
@@ -60,7 +66,7 @@ class trader_combined:
                             'Sale Price/Transaction Price (Rs/kwh)', 'Trading Margin (Rs/kwh)']
 
         # Remove unwanted characters
-        unwanted_chars = [' ', '*', ',', '^', '#', 'NIL', '•']
+        unwanted_chars = [' ', '*', ',', '^', '#', 'NIL', '•',"'",';']
         for char in unwanted_chars:
             df[columns_to_strip] = df[columns_to_strip].astype(str).apply(lambda x: x.str.replace(char, ''))
 
@@ -126,7 +132,7 @@ class trader_combined:
         # Save the modified DataFrame to an Excel file
         output_file = os.path.join(self.file_directory, 'trader_final2.xlsx')
         df.to_excel(output_file, index=False)
-        print(f'File saved')
+        print(f'File saved {output_file}')
 
     def correct_date_format(self):
         input_file = os.path.join(self.file_directory, 'trader_final2.xlsx')
@@ -169,7 +175,7 @@ class trader_combined:
         # Save the modified DataFrame to an Excel file
         output_file = os.path.join(self.file_directory, 'trader_final3.xlsx')
         df.to_excel(output_file, index=False)
-        print(f'File saved')
+        print(f'File saved {output_file}')
 
     def correcting_state_name(self):
         input_file = os.path.join(self.file_directory, 'trader_final3.xlsx')
@@ -182,11 +188,11 @@ class trader_combined:
         unique_states = df[state_columns].stack().unique()
 
         states_and_ut = ['Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar',
-            'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 'Gujarat',
-            'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Ladakh',
-            'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha',
-            'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh',
-            'Uttarakhand', 'West Bengal']
+                         'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa',
+                         'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka',
+                         'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya',
+                         'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
+                         'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal']
 
         # Initialize a list to store results
         results = []
@@ -208,30 +214,7 @@ class trader_combined:
         # Save to Excel file
         output_file = os.path.join(self.file_directory, 'matched_states.xlsx')
         result_df.to_excel(output_file, index=False)
-
         return result_df
-
-        # # Compute similarity matrix
-        # similarity_matrix = {}
-        # for name1, name2 in combinations(unique_states, 2):
-        #     similarity_matrix[(name1, name2)] = fuzz.ratio(name1, name2)
-        #
-        # # Create a DataFrame to store the results
-        # results = []
-        # for name1, name2 in combinations(unique_states, 2):
-        #     ratio = fuzz.ratio(name1, name2)
-        #     if ratio >= 92:
-        #         results.append({'Original_Name': name2, 'Matched_Name': name1, 'Fuzz_Ratio': ratio})
-        #
-        # results_df = pd.DataFrame(results)
-        #
-        # output_file = os.path.join(self.file_directory, 'state_name_corrections.xlsx')
-        # results_df.to_excel(output_file, index=False)
-
-        # Save the modified DataFrame to an Excel file
-        # output_file = os.path.join(self.file_directory, 'trader_final4.xlsx')
-        # df.to_excel(output_file, index=False)
-        # print(f'File saved')
 
     def data_mapping_file(self):
         input_file = os.path.join(self.file_directory, 'trader_final3.xlsx')
@@ -240,21 +223,86 @@ class trader_combined:
         # List of columns containing state names
         state_columns = ['State of Seller', 'State of Buyer']
 
-        for name, mane_to_change in trader_data_mapping.state_mapping.items():
+        for name, mane_to_change in data_mapping.trader_state_mapping.items():
             df[state_columns] = df[state_columns].replace(name, mane_to_change)
+
+        # columns_to_remove_new_line = ['']
+
+        df = df.apply(lambda x: str(x).replace('\n', ' ') if isinstance(x, str) else x)
 
         # Save the modified DataFrame to an Excel file
         output_file = os.path.join(self.file_directory, 'trader_final4.xlsx')
         df.to_excel(output_file, index=False)
-        print(f'File saved')
+        print(f'File saved {output_file}')
+
+    def removing_duplicate_category_values(self):
+        input_file = os.path.join(self.file_directory, 'trader_final4.xlsx')
+        df = pd.read_excel(input_file)
+
+        # List of columns containing category names
+        category_columns = ['Category of Seller', 'Category of Buyer']
+
+        for col in category_columns:
+            df[col] = df[col].str.replace('\n', '')
+
+        # Extract unique category names from specified columns
+        unique_categories = df[category_columns].stack().unique()
+
+        category_values = ['State Discom', 'Trader (Government)', 'Captive', 'Deemed Distribution Licensee', 'Consumer',
+                           'Trader/OAC', 'DVVNL', 'Trust', 'Discom Consumer', 'Distribution Licensee', 'Bulk Consumer',
+                           'Open Access Consumer', 'Generator', 'State Utility', 'Discom', 'Power Exchange', 'Utility',
+                           'Industry', 'Industrial Consumer', 'Trader/Discom', 'District Licensee', 'Distribution',
+                           'Industrial Buyer', 'Government', 'Hotel', 'Industry', 'Bulk Power', 'Commercial'
+                                                                                                'ISGS',
+                           'Government of Uttar Pradesh', 'Central Government Organisation', 'Thermal', 'RE Power',
+                           'Hydro', 'IPP', 'Trader/OAC', 'Bagasse', 'Nodal Agency', 'OA Consumer', 'Biomass', 'IEX',
+                           'Gas', 'Buyer', 'Non Solar', 'SPD', 'WPD', 'HPD', 'Cogen', 'Small Hydro', 'State Discom',
+                           'ISGS', 'Trading Licensee', 'Solar', 'Discom Consumer', '']
+
+        # Initialize a list to store results
+        results = []
+
+        # Calculate fuzzy ratio for each unique state name
+        for state in unique_categories:
+            best_ratio = 0
+            best_match = ''
+            for official_state in category_values:
+                ratio = fuzz.ratio(state, official_state)
+                if ratio > best_ratio:
+                    best_ratio = ratio
+                    best_match = official_state
+            results.append({'Original Name': state, 'Matched Name': best_match, 'Fuzzy Ratio': best_ratio})
+
+        # Create a DataFrame from results
+        result_df = pd.DataFrame(results)
+
+        # Save to Excel file
+        output_file = os.path.join(self.file_directory, 'matched_category.xlsx')
+        result_df.to_excel(output_file, index=False)
+        print(f'File saved {output_file}')
+
+    def data_mapping_for_category(self):
+        input_file = os.path.join(self.file_directory, 'trader_final4.xlsx')
+        df = pd.read_excel(input_file)
+
+        # List of columns containing state names
+        category_columns = ['Category of Seller', 'Category of Buyer']
+
+        for name, mane_to_change in data_mapping.trader_category_mapping.items():
+            df[category_columns] = df[category_columns].replace(name, mane_to_change)
+
+        # Save the modified DataFrame to an Excel file
+        output_file = os.path.join(self.file_directory, 'trader_final5.xlsx')
+        df.to_excel(output_file, index=False)
+        print(f'File saved {output_file}')
 
 
 if __name__ == "__main__":
     trader_data = trader_combined()
-    # trader_data.unmerge_columns()
-    # trader_data.use_ffill_method()
-    # trader_data.remove_unwanted_characters()
-    # trader_data.correct_date_format()
-    # trader_data.correcting_state_name()
+    trader_data.unmerge_columns()
+    trader_data.use_ffill_method()
+    trader_data.remove_unwanted_characters()
+    trader_data.correct_date_format()
     trader_data.data_mapping_file()
+    trader_data.data_mapping_for_category()
     pass

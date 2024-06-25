@@ -10,7 +10,7 @@ final_directory = r'C:\GNA\Data Upload'
 
 
 def daily_outage_report_thermal_nuclear_units_only_for_500mw():
-	file_path = r'C:\GNA\Data\Outage\Thermal,Nuclear for 500MW'
+	file_path = r'C:\GNA\Data\Outage\Thermal,Nuclear for 500MW_1'
 	if os.path.exists(file_path):
 		for file in os.listdir(file_path):
 			file_path_full = os.path.join(file_path, file)

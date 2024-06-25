@@ -8,50 +8,35 @@ from datetime import datetime, timedelta
 from PyPDF2 import PdfReader
 import json
 
-MONTHS = {
-    'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
-    'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
-}
-
-month_replacements = {
-    'January': '01', 'Jan': '01',
-    'February': '02', 'Feb': '02',
-    'March': '03', 'Mar': '03',
-    'April': '04', 'Apr': '04',
-    'May': '05',
-    'June': '06', 'Jun': '06',
-    'July': '07', 'Jul': '07',
-    'August': '08', 'Aug': '08',
-    'September': '09', 'Sep': '09',
-    'October': '10', 'Oct': '10',
-    'November': '11', 'Nov': '11',
-    'December': '12', 'Dec': '12'
-}
-
-main_directory = r'C:\GNA\Data\Reverse Auction'
-
-file_directory = r"C:\GNA\Data\Reverse Auction\PXIL Reverse Auction"
-
-result_report_file = r"C:\GNA\Data\Reverse Auction\RAResultReport.xlsx"
-
-output_directory = r'C:\GNA\Data\Reverse Auction\PXIL Reverse Auction xlsx Files'
-if not os.path.exists(output_directory):
-    os.makedirs(output_directory)
-
-output_directory1 = r'C:\GNA\Data\Reverse Auction\PXIL Reverse Auction xlsx Files1'
-if not os.path.exists(output_directory1):
-    os.makedirs(output_directory1)
-
-error_log_file = r'C:\GNA\Data\IEX Reverse Auction\error_log_pxil.xlsx'
-
-final_directory = r'C:\GNA\Data Upload'
-if not os.path.exists(final_directory):
-    os.makedirs(final_directory)
-
 
 class pxil_reverse_auction():
     def __init__(self):
+        self.main_directory = r'C:\GNA\Data\Reverse Auction'
+        self.final_directory = r'C:\GNA\Data Upload'
+        self.file_directory = r"C:\GNA\Data\Reverse Auction\PXIL Reverse Auction"
+        self.output_directory = r'C:\GNA\Data\Reverse Auction\PXIL Reverse Auction xlsx Files'
+        self.output_directory1 = r'C:\GNA\Data\Reverse Auction\PXIL Reverse Auction xlsx Files1'
+        self.error_log_file = r'C:\GNA\Data\IEX Reverse Auction\error_log_pxil.xlsx'
+        self.result_report_file = r"C:\GNA\Data\Reverse Auction\RAResultReport.xlsx"
+
+        self.month_replacements = {'January': '01', 'Jan': '01', 'February': '02', 'Feb': '02', 'March': '03',
+                                   'Mar': '03', 'April': '04', 'Apr': '04', 'May': '05', 'June': '06', 'Jun': '06',
+                                   'July': '07', 'Jul': '07', 'August': '08', 'Aug': '08', 'September': '09',
+                                   'Sep': '09', 'October': '10', 'Oct': '10', 'November': '11', 'Nov': '11',
+                                   'December': '12', 'Dec': '12'}
+
+        self.clear_or_create_directory(self.file_directory)
+        self.clear_or_create_directory(self.output_directory)
         pass
+
+    def clear_or_create_directory(selfself, directory):
+        if os.path.exists(directory):
+            for file in os.listdir(directory):
+                file_path_full = os.path.join(directory, file)
+                if os.path.isfile(file_path_full):
+                    os.remove(file_path_full)
+        else:
+            os.makedirs(directory)
 
     def links_for_data(self):
         base_date = datetime.now()
@@ -60,38 +45,31 @@ class pxil_reverse_auction():
         base_end_date = base_end_date.strftime('%Y-%m-%d')
         print(base_date)
         print(base_end_date)
-        pay_load = {
-            "from_date": base_end_date,
-            "to_date": base_date,
-            "result_ra_type": "ALL"
-        }
+        pay_load = {"from_date": base_end_date, "to_date": base_date, "result_ra_type": "ALL"}
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-            "Accept": "application/json, text/javascript, */*; q=0.01",
-            "Accept-Language": "en-US,en;q=0.9",
-            "Accept-EnData": "gzip, deflate, br, zstd",
-            "Connection": "keep-alive",
-        }
+            "Accept": "application/json, text/javascript, */*; q=0.01", "Accept-Language": "en-US,en;q=0.9",
+            "Accept-EnData": "gzip, deflate, br, zstd", "Connection": "keep-alive", }
         url = 'https://powerexindia.in/get_result_data/'
 
         data = requests.post(url, data=pay_load, headers=headers)
         data = data.json()
-        file_name = os.path.join(main_directory, 'links.josn')
+        file_name = os.path.join(self.main_directory, 'links.josn')
         with open(file_name, 'w') as json_file:
             json.dump(data, json_file, indent=4)
 
         pxil_reverse_auction.json_to_xlsx(self)
 
     def json_to_xlsx(self):
-        file_name = os.path.join(main_directory, 'links.josn')
+        file_name = os.path.join(self.main_directory, 'links.josn')
         df = pd.read_json(file_name)
-        df.to_excel(result_report_file, index=False)
+        df.to_excel(self.result_report_file, index=False)
 
         pxil_reverse_auction.edit_result_report(self)
 
     def edit_result_report(self):
         # file = r"C:\GNA\Data\Reverse Auction\RAResultReport.xlsx"
-        df = pd.read_excel(result_report_file)
+        df = pd.read_excel(self.result_report_file)
         df = df['data'].astype(str).str.split(r"':", expand=True)
         df = df.drop(columns=[0, 1, 6], axis=0)
         df = df.replace("'", '', regex=True)
@@ -100,7 +78,7 @@ class pxil_reverse_auction():
         df[4] = df[4].astype(str).str.split(',').str[0]
         df[5] = df[5].astype(str).str.split(',').str[0]
         df = df[4].astype(str).str.split(' ', expand=True)
-        df.to_excel(result_report_file, index=False)
+        df.to_excel(self.result_report_file, index=False)
 
     def download_file(self, url, destination):
         response = requests.get(url)
@@ -108,12 +86,7 @@ class pxil_reverse_auction():
             f.write(response.content)
 
     def generate_url_links(self):
-        file_path = r'C:\GNA\Data\Reverse Auction\PXIL Reverse Auction'
-        if not os.path.exists(file_path):
-            os.makedirs(file_path)
-
-        excel_file = r'C:\GNA\Data\Reverse Auction\RAResultReport.xlsx'
-        df = pd.read_excel(excel_file)
+        df = pd.read_excel(self.result_report_file)
         date = df[1].tolist()
         month = df[2].tolist()
         year = df[3].tolist()
@@ -124,7 +97,7 @@ class pxil_reverse_auction():
             response = requests.get(url)
 
             if response.status_code == 200:
-                with open(f'{file_path}/{auction_id}.pdf', 'wb') as f:
+                with open(f'{self.file_directory}/{auction_id}.pdf', 'wb') as f:
                     f.write(response.content)
                 print(f"File {auction_id}.pdf downloaded successfully.")
 
@@ -171,15 +144,15 @@ class pxil_reverse_auction():
 
     def pdf_to_xlsx(self):
         pdf_files = []
-        for pdf_file in os.listdir(file_directory):
+        for pdf_file in os.listdir(self.file_directory):
             if pdf_file.endswith('.pdf'):
                 pdf_files.append(pdf_file)
 
         for pdf_file in pdf_files:
-            file_path = os.path.join(file_directory, pdf_file)
+            file_path = os.path.join(self.file_directory, pdf_file)
             file_name = pdf_file.split('.pdf')[0]  # Split file name by '.pdf'
-            output_path = os.path.join(output_directory, file_name + '_except_last_file.xlsx')
-            last_table_output_path = os.path.join(output_directory, file_name + '_last.xlsx')
+            output_path = os.path.join(self.output_directory, file_name + '_except_last_file.xlsx')
+            last_table_output_path = os.path.join(self.output_directory, file_name + '_last.xlsx')
             last_table = None
 
             auction_initiation_date, auction_result_date, accepted_quantity_text = pxil_reverse_auction.extract_text_from_pdf(
@@ -207,7 +180,7 @@ class pxil_reverse_auction():
                             merged_df = pd.concat([merged_df, df], ignore_index=True)
 
                 if last_table is not None and 'Start Date' in last_table.columns:
-                    last_table_output_path = os.path.join(output_directory, file_name + '_last.xlsx')
+                    last_table_output_path = os.path.join(self.output_directory, file_name + '_last.xlsx')
                     last_table.to_excel(last_table_output_path, index=False)
                     print(
                         f"Successfully extracted and saved the last table from {pdf_file} to {last_table_output_path}")
@@ -221,10 +194,8 @@ class pxil_reverse_auction():
                 transposed_df = transposed_df.iloc[1:]
                 transposed_df.columns = transposed_df.columns.str.replace(r'\.(\d+)$', '')
                 # Rename columns
-                transposed_df.rename(
-                    columns={'Delivery Dates': 'Delivery Start Date',
-                             '(Start Date to End Date)': 'Delivery End Date', },
-                    inplace=True)
+                transposed_df.rename(columns={'Delivery Dates': 'Delivery Start Date',
+                                              '(Start Date to End Date)': 'Delivery End Date', }, inplace=True)
                 transposed_df.insert(0, 'Auction No.', file_name)
 
                 if len(auction_initiation_date) > 0:
@@ -245,13 +216,13 @@ class pxil_reverse_auction():
 
     def edit_last_table(self):
         xlsx_files = []
-        for xlsx_file in os.listdir(output_directory):
+        for xlsx_file in os.listdir(self.output_directory):
             if xlsx_file.endswith('_last.xlsx'):
                 xlsx_files.append(xlsx_file)
 
         for xlsx_file in xlsx_files:
-            file_path = os.path.join(output_directory, xlsx_file)
-            output_path = os.path.join(output_directory, os.path.splitext(xlsx_file)[0] + '.xlsx')
+            file_path = os.path.join(self.output_directory, xlsx_file)
+            output_path = os.path.join(self.output_directory, os.path.splitext(xlsx_file)[0] + '.xlsx')
             print(xlsx_file)
 
             df = pd.read_excel(file_path)
@@ -263,13 +234,13 @@ class pxil_reverse_auction():
 
     def edit_except_last_files(self):
         xlsx_files = []
-        for xlsx_file in os.listdir(output_directory):
+        for xlsx_file in os.listdir(self.output_directory):
             if xlsx_file.endswith('_except_last_file.xlsx'):
                 xlsx_files.append(xlsx_file)
 
         for xlsx_file in xlsx_files:
-            file_path = os.path.join(output_directory, xlsx_file)
-            output_path = os.path.join(output_directory, os.path.splitext(xlsx_file)[0] + '.xlsx')
+            file_path = os.path.join(self.output_directory, xlsx_file)
+            output_path = os.path.join(self.output_directory, os.path.splitext(xlsx_file)[0] + '.xlsx')
 
             df = pd.read_excel(file_path)
             if 'Unnamed: 0' and 'Unnamed: 6' in df.columns:
@@ -312,7 +283,7 @@ class pxil_reverse_auction():
             df['Auction Result Date'] = df['Auction Result Date'].apply(
                 lambda x: re.sub(r'(?:st|nd|rd|th|,)', '', str(x)))
 
-            for month_name, month_num in month_replacements.items():
+            for month_name, month_num in self.month_replacements.items():
                 df['Auction Initiation Date'] = df['Auction Initiation Date'].str.replace(month_name, month_num)
                 df['Auction Result Date'] = df['Auction Result Date'].str.replace(month_name, month_num)
 
@@ -329,8 +300,8 @@ class pxil_reverse_auction():
 
             df['Accepted Quantity'] = df['Accepted Quantity'].astype(str).replace(
                 'ReverseAuctionResultsnotAvailableasnosellerparticipatedAcceptedPrice', '', regex=True)
-            df['Accepted Quantity'] = df['Accepted Quantity'].astype(str).replace(
-                'byBuyerDetailsAcceptedquantity', '', regex=True)
+            df['Accepted Quantity'] = df['Accepted Quantity'].astype(str).replace('byBuyerDetailsAcceptedquantity', '',
+                                                                                  regex=True)
             df['Accepted Quantity'] = df['Accepted Quantity'].astype(str).replace(
                 'ReverseAuctionResultsnotAcceptedbytheBuyerforAllocationAcceptedPrice', '', regex=True)
 
@@ -341,27 +312,27 @@ class pxil_reverse_auction():
 
     def merge_last_files(self):
         xlsx_files = []
-        for xlsx_file in os.listdir(output_directory):
+        for xlsx_file in os.listdir(self.output_directory):
             if xlsx_file.endswith('_last.xlsx'):
                 xlsx_files.append(xlsx_file)
         merged_df = pd.DataFrame()
         for xlsx_file in xlsx_files:
-            file_path = os.path.join(output_directory, xlsx_file)
+            file_path = os.path.join(self.output_directory, xlsx_file)
             df = pd.read_excel(file_path)
             merged_df = pd.concat([merged_df, df], ignore_index=True)
 
-        merged_file_path = os.path.join(main_directory, 'merged_last_pxil.xlsx')
+        merged_file_path = os.path.join(self.main_directory, 'merged_last_pxil.xlsx')
         merged_df.to_excel(merged_file_path, index=False)
         print(f"Merged file Saved to '{merged_file_path}'")
 
     def merge_except_last_files(self):
         xlsx_files = []
-        for xlsx_file in os.listdir(output_directory):
+        for xlsx_file in os.listdir(self.output_directory):
             if xlsx_file.endswith('_except_last_file.xlsx'):
                 xlsx_files.append(xlsx_file)
         merged_df = pd.DataFrame()
         for xlsx_file in xlsx_files:
-            file_path = os.path.join(output_directory, xlsx_file)
+            file_path = os.path.join(self.output_directory, xlsx_file)
             df = pd.read_excel(file_path)
             merged_df = pd.concat([merged_df, df], ignore_index=True)
 
@@ -399,27 +370,14 @@ class pxil_reverse_auction():
                                                                                             regex=True)
 
         merged_df[['Allocated Quantity (in MW)', 'Accepted Price (in Rs./kWh)']] = merged_df[
-            'Accepted Quantity'].astype(
-            str).str.split('@', expand=True)
+            'Accepted Quantity'].astype(str).str.split('@', expand=True)
         merged_df.drop(['Accepted Quantity'], axis=1, inplace=True)
 
-        column_to_move = [
-            'Auction No.',
-            'Auction Initiation Date',
-            'Auction Result Date',
-            'Buyer',
-            'Delivery Start Date',
-            'Delivery End Date',
-            'Delivery Start Time',
-            'Delivery End Time',
-            'Buy - Total Quantity (in MW)',
-            'Buy - Minimum Quantity (in MW)',
-            'Delivery Point',
-            'Total count of Delivery Days',
-            'Exclusion Days',
-            'Allocated Quantity (in MW)',
-            'Accepted Price (in Rs./kWh)',
-        ]
+        column_to_move = ['Auction No.', 'Auction Initiation Date', 'Auction Result Date', 'Buyer',
+                          'Delivery Start Date', 'Delivery End Date', 'Delivery Start Time', 'Delivery End Time',
+                          'Buy - Total Quantity (in MW)', 'Buy - Minimum Quantity (in MW)', 'Delivery Point',
+                          'Total count of Delivery Days', 'Exclusion Days', 'Allocated Quantity (in MW)',
+                          'Accepted Price (in Rs./kWh)', ]
         remaining_column_order = [col for col in merged_df.columns if col not in column_to_move]
         column_order = column_to_move + remaining_column_order
         merged_df = merged_df[column_order]
@@ -434,20 +392,20 @@ class pxil_reverse_auction():
         merged_df['Auction No.'] = merged_df['Auction No.'].astype(str).replace('-Anydy', 'Anyday', regex=True)
         merged_df['Auction No.'] = merged_df['Auction No.'].astype(str).replace('-Anyday', 'Anyday', regex=True)
 
-        merged_file_path = os.path.join(main_directory, 'merged_except_last_file_pxil.xlsx')
+        merged_file_path = os.path.join(self.main_directory, 'merged_except_last_file_pxil.xlsx')
         merged_df.to_excel(merged_file_path, index=False)
         print(f"Merged File Saved to '{merged_file_path}'")
 
     def merge_final_files(self):
-        file_1 = r"C:\GNA\Data\Reverse Auction\merged_except_last_file_pxil.xlsx"
-        file_2 = r"C:\GNA\Data\Reverse Auction\merged_last_pxil.xlsx"
+        file_1 = os.path.join(self.main_directory, 'merged_except_last_file_pxil.xlsx')
+        file_2 = os.path.join(self.main_directory, 'merged_last_pxil.xlsx')
+
         df1 = pd.read_excel(file_1)
         df2 = pd.read_excel(file_2)
 
         # Merge DataFrames based on 'Auction No.' column
         merged_df = pd.merge(df1, df2, on="Auction No.", how="left")
-        column_to_drop = ['Qty',
-                          'Min Qty', ]
+        column_to_drop = ['Qty', 'Min Qty', ]
         merged_df = merged_df.drop(columns=column_to_drop)
 
         merged_df.insert(0, 'Exchange Type', 'PXIL')
@@ -468,12 +426,8 @@ class pxil_reverse_auction():
         merged_df.drop(['Delivery Start Date', 'Delivery End Date', 'Delivery Start Time', 'Delivery End Time'], axis=1,
                        inplace=True)
 
-        merged_df.rename(columns={
-            'From Slot': 'Delivery Start Time',
-            'To Slot': 'Delivery End Time',
-            'Start Date': 'Delivery Start Date',
-            'End Date': 'Delivery End Date'
-        }, inplace=True)
+        merged_df.rename(columns={'From Slot': 'Delivery Start Time', 'To Slot': 'Delivery End Time',
+                                  'Start Date': 'Delivery Start Date', 'End Date': 'Delivery End Date'}, inplace=True)
 
         merged_df['Auction Result Date'] = merged_df['Auction Result Date'].dt.date
         merged_df['Auction Initiation Date'] = merged_df['Auction Initiation Date'].dt.date
@@ -486,38 +440,22 @@ class pxil_reverse_auction():
         # merged_df['Delivery End Time'] = merged_df['Delivery End Time'].replace('24:00', '24:00:00')
         # merged_df['Delivery End Time'] = pd.to_datetime(merged_df['Delivery End Time'], format='%H:%M').dt.time
 
-        column_to_move = [
-            'Exchange Type',
-            'Auction No.',
-            'Auction Initiation Date',
-            'Auction Result Date',
-            'Buyer',
-            'Delivery Start Date',
-            'Delivery End Date',
-            'Delivery Start Time',
-            'Delivery End Time',
-            'Buy - Total Quantity (in MW)',
-            'Buy - Minimum Quantity (in MW)',
-            'Delivery Point',
-            'Total count of Delivery Days',
-            'Exclusion Days',
-            'Allocated Quantity (in MW)',
-            'Accepted Price (in Rs./kWh)',
-            'Total count of Sellers who participated in the auction'
-        ]
+        column_to_move = ['Exchange Type', 'Auction No.', 'Auction Initiation Date', 'Auction Result Date', 'Buyer',
+                          'Delivery Start Date', 'Delivery End Date', 'Delivery Start Time', 'Delivery End Time',
+                          'Buy - Total Quantity (in MW)', 'Buy - Minimum Quantity (in MW)', 'Delivery Point',
+                          'Total count of Delivery Days', 'Exclusion Days', 'Allocated Quantity (in MW)',
+                          'Accepted Price (in Rs./kWh)', 'Total count of Sellers who participated in the auction']
         # remaining_column_order = [col for col in merged_df.columns if col not in column_to_move]
         # column_order = column_to_move + remaining_column_order
         # merged_df = merged_df[column_order]
         merged_df = merged_df[column_to_move]
 
-        merged_df.rename(columns={
-            'Buy - Minimum Quantity (in MW)': 'Buy Minimum Quantity (in MW)',
-            'Buy - Total Quantity (in MW)': 'Buy Total Quantity (in MW)',
-            'Exclusion Days': 'Exclusion Dates'
-        }, inplace=True)
+        merged_df.rename(columns={'Buy - Minimum Quantity (in MW)': 'Buy Minimum Quantity (in MW)',
+                                  'Buy - Total Quantity (in MW)': 'Buy Total Quantity (in MW)',
+                                  'Exclusion Days': 'Exclusion Dates'}, inplace=True)
 
         merged_df = merged_df.sort_values(by='Auction Result Date', ascending=False)
-        output_path = os.path.join(final_directory, 'final_pxil.xlsx')
+        output_path = os.path.join(self.final_directory, 'final_pxil.xlsx')
         merged_df.to_excel(output_path, index=False)
         print(f'Final File Saved at {output_path}')
 
