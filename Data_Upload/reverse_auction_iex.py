@@ -14,12 +14,12 @@ from PyPDF2 import PdfReader
 from datetime import datetime, timedelta
 
 
-class iex_reverse_auction():
+class iex_reverse_auction:
     def __init__(self):
         self.main_directory = r'C:\GNA\Data\Reverse Auction'
         self.final_directory = r'C:\GNA\Data Upload'
         self.file_directory = r'C:\GNA\Data\Reverse Auction\IEX Reverse Auction'
-        # self.clear_or_create_directory(self.file_directory)
+        self.clear_or_create_directory(self.file_directory)
         self.output_directory_1 = r'C:\GNA\Data\Reverse Auction\IEX Reverse Auction Table0'
         self.clear_or_create_directory(self.output_directory_1)
         self.output_directory_2 = r'C:\GNA\Data\Reverse Auction\IEX Reverse Auction Table1'

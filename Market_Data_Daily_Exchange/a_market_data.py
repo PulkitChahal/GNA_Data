@@ -58,8 +58,8 @@ status = {
 }
 
 # ------------IEX-------------
-# status['IEX']['dam_iex_area.run'] = dam_iex_area.run()
-# status['IEX']['dam_iex_market'] = dam_iex_market.run()
+status['IEX']['dam_iex_area.run'] = dam_iex_area.run()
+status['IEX']['dam_iex_market'] = dam_iex_market.run()
 status['IEX']['gdam_iex_area'] = gdam_iex_area.run()
 status['IEX']['gdam_iex_market'] = gdam_iex_market.run()
 status['IEX']['hpdam_iex_area'] = hpdam_iex_area.run()

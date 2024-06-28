@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from urllib.parse import urlparse, parse_qs
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.service import Service
 import shutil
 import time
 from datetime import datetime
@@ -19,7 +20,9 @@ def run():
         options = Options()
         prefs = {"download.default_directory": r"C:\GNA\Market Data\test"}
         options.add_experimental_option("prefs", prefs)
-        driver = webdriver.Chrome(options=options)
+        chromedriver_path = r'C:\Users\pulki\.cache\selenium\chromedriver\win64\125.0.6422.76\chromedriver.exe'
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=options)
         driver.get("https://www.iexindia.com/marketdata/areaprice.aspx")
     except Exception as e:
         return "Webpage Not Found"
@@ -27,13 +30,9 @@ def run():
     try:
         # time.sleep(5)
         # Select Delivery Period
-        data_date = Select(
-            driver.find_element(
-                By.XPATH,
-                "/html/body/form/div[3]/section[2]/div/div/div/div[1]/div[1]/label[2]/select",
-            )
-        )
-        your_value = "0"
+        data_date = Select(driver.find_element(By.XPATH,
+                                               "/html/body/form/div[3]/section[2]/div/div/div/div[1]/div[1]/label[2]/select", ))
+        your_value = "1"
         data_date.select_by_value(your_value)
 
         # Update Report
@@ -46,34 +45,22 @@ def run():
         try:
             time.sleep(5)
             # Wait till data is available
-            driver.find_element(
-                By.XPATH,
-                "/html/body/form/div[3]/section[2]/div/div/div/span[3]/div/table/tbody/tr[5]/td[3]/div/div[1]/div/table/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr/td[1]/table",
-            )
+            driver.find_element(By.XPATH,
+                                "/html/body/form/div[3]/section[2]/div/div/div/span[3]/div/table/tbody/tr[5]/td[3]/div/div[1]/div/table/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr/td[1]/table", )
         except Exception as e:
             return "Data Not Available"
 
         # Wait till download excel file button is present
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    "/html/body/form/div[3]/section[2]/div/div/div/span[3]/div/table/tbody/tr[4]/td/div/div/div[4]/table/tbody/tr/td/div[2]/div[1]/a",
-                )
-            )
-        )
+        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH,
+                                                                        "/html/body/form/div[3]/section[2]/div/div/div/span[3]/div/table/tbody/tr[4]/td/div/div/div[4]/table/tbody/tr/td/div[2]/div[1]/a",)))
 
         # Click on download button
-        table = driver.find_element(
-            By.ID, "ctl00_InnerContent_reportViewer_ctl05_ctl04_ctl00"
-        )
+        table = driver.find_element(By.ID, "ctl00_InnerContent_reportViewer_ctl05_ctl04_ctl00")
         table.click()
 
         # Start downloading excel file
-        anchor = driver.find_element(
-            By.XPATH,
-            "/html/body/form/div[3]/section[2]/div/div/div/span[3]/div/table/tbody/tr[4]/td/div/div/div[4]/table/tbody/tr/td/div[2]/div[1]/a",
-        )
+        anchor = driver.find_element(By.XPATH,
+                                     "/html/body/form/div[3]/section[2]/div/div/div/span[3]/div/table/tbody/tr[4]/td/div/div/div[4]/table/tbody/tr/td/div[2]/div[1]/a", )
         try:
             anchor.click()
         except Exception as e:
@@ -115,8 +102,7 @@ def run():
             next_date = datetime.today() + timedelta(days=1)
             new_date = next_date.strftime("%d.%m.%y")
             new_file = (
-                    "DAM IEX Area Price_" + datetime.now().strftime("%d.%m.%y") + ".xlsx"
-            )
+                    "DAM IEX Area Price_" + new_date + ".xlsx")  # new_file = ("DAM IEX Area Price_" + datetime.now().strftime("%d.%m.%y") + ".xlsx")
         except Exception as e:
             return "File Name Not Changed"
 
@@ -125,17 +111,13 @@ def run():
             local_path = r"C:/GNA/Market Data/All Data"
             if not os.path.exists(local_path):
                 os.makedirs(local_path)
-            shutil.copyfile(
-                os.path.join(path_to_add, file), rf"{local_path}/{new_file}"
-            )
+            shutil.copyfile(os.path.join(path_to_add, file), rf"{local_path}/{new_file}")
             time.sleep(2)
 
             file_store = r"C:/GNA/Market Data/Day Wise IEX (DAM)"
             if not os.path.exists(file_store):
                 os.makedirs(file_store)
-            shutil.copyfile(
-                os.path.join(path_to_add, file), rf"{file_store}/{new_file}"
-            )
+            shutil.copyfile(os.path.join(path_to_add, file), rf"{file_store}/{new_file}")
         except Exception as e:
             return "File Not Shifted To Local Path"
         finally:

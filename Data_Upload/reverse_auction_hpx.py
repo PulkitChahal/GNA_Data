@@ -13,16 +13,15 @@ from PyPDF2 import PdfReader
 import re
 
 
-class hpx_reverse_auction():
+class hpx_reverse_auction:
     def __init__(self):
-        self.file_directory = r'C:\GNA\Data\Reverse Auction\HPX Reverse Auction'
-        self.output_directory = r'C:\GNA\Data\Reverse Auction\HPX Reverse Auction xlsx Files'
-        self.final_directory = r'C:\GNA\Data Upload'
         self.main_directory = r'C:\GNA\Data\Reverse Auction'
-        self.error_log_file = r'C:\GNA\Data\Reverse Auction\hpx_pdf_not_converted.xlsx'
-
+        self.final_directory = r'C:\GNA\Data Upload'
+        self.file_directory = r'C:\GNA\Data\Reverse Auction\HPX Reverse Auction'
         self.clear_or_create_directory(self.file_directory)
+        self.output_directory = r'C:\GNA\Data\Reverse Auction\HPX Reverse Auction xlsx Files'
         self.clear_or_create_directory(self.output_directory)
+        self.error_log_file = r'C:\GNA\Data\Reverse Auction\hpx_pdf_not_converted.xlsx'
 
         self.month_replacements = {'January': '01', 'Jan': '01', 'February': '02', 'Feb': '02', 'March': '03',
             'Mar': '03', 'April': '04', 'Apr': '04', 'May': '05', 'June': '06', 'Jun': '06', 'July': '07', 'Jul': '07',
@@ -98,8 +97,8 @@ class hpx_reverse_auction():
         df.to_excel(file_name_file_path, index=False)
         links = table_find.find_elements(By.TAG_NAME, 'a')
 
-        for i, link in enumerate(links[:15]):
-            # for link in links:
+        for i, link in enumerate(links[:5]):
+        # for link in links:
             href = link.get_attribute('href')
             filename = href.split('/')[-1]
             print(filename)

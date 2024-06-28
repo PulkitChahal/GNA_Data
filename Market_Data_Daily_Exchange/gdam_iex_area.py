@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from urllib.parse import urlparse, parse_qs
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.service import Service
 import shutil
 import time
 from datetime import datetime
@@ -20,8 +21,8 @@ def run():
         prefs = {"download.default_directory": r"C:\GNA\Market Data\test"}
         options.add_experimental_option("prefs", prefs)
         chromedriver_path = r'C:\Users\pulki\.cache\selenium\chromedriver\win64\125.0.6422.76\chromedriver.exe'
-        driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
-        # driver = webdriver.Chrome(options=options)
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=options)
         driver.get("https://www.iexindia.com/marketdata/GDAM-areaprice.aspx")
     except Exception as e:
         return "Webpage Not Found"

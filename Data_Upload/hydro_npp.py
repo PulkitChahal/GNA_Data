@@ -159,9 +159,9 @@ class hydro_npp_daily_data:
         print(f"Merged File Saved at '{final_file}'")
 
     def get_data(self):
-        hydro_npp_daily_data().hydro_level_data()
-        hydro_npp_daily_data().edit_xlsx_file()
-        hydro_npp_daily_data().merge_xlsx_files()
+        hydro_npp_daily_data.hydro_level_data(self)
+        hydro_npp_daily_data.edit_xlsx_file(self)
+        hydro_npp_daily_data.merge_xlsx_files(self)
         pass
 
 

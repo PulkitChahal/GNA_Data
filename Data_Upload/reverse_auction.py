@@ -2,9 +2,9 @@ import pandas as pd
 import os
 from fuzzywuzzy import fuzz
 import Data_Upload.data_mapping
-import Data_Upload.iex_reverse_auction
-import Data_Upload.pxil_reverse_auction
-import Data_Upload.hpx_reverse_auction
+import Data_Upload.reverse_auction_iex
+import Data_Upload.reverse_auction_pxil
+import Data_Upload.reverse_auction_hpx
 from itertools import combinations
 
 
@@ -95,17 +95,20 @@ class tam_reverse_auction:
         df['Exclusion Dates'] = df['Exclusion Dates'].astype(str)
         df['Auction No.'] = df['Auction No.'].astype(str)
 
+        # df['duplicate'] = df.duplicated(keep=False).astype(int)
+        # df['duplicate'] = df.groupby(list(df.columns[:-1])).cumcount() + df['duplicate']
+
         output_path = os.path.join(self.file_directory, 'final_tam.xlsx')
         df.to_excel(output_path, index=False)
         print(f'Data Mapping done file saved at {deep_file_path}')
 
     def get_data(self):
-        Data_Upload.iex_reverse_auction.iex_reverse_auction().get_data()
-        Data_Upload.pxil_reverse_auction.pxil_reverse_auction().get_data()
-        Data_Upload.hpx_reverse_auction.hpx_reverse_auction().get_data()
-        tam_reverse_auction().merged_data()
-        tam_reverse_auction().remove_duplicate_buyer_name()
-        tam_reverse_auction().data_mapping()
+        Data_Upload.reverse_auction_iex.iex_reverse_auction().get_data()
+        Data_Upload.reverse_auction_pxil.pxil_reverse_auction().get_data()
+        Data_Upload.reverse_auction_hpx.hpx_reverse_auction().get_data()
+        tam_reverse_auction.merged_data(self)
+        tam_reverse_auction.remove_duplicate_buyer_name(self)
+        tam_reverse_auction.data_mapping(self)
 
 
 if __name__ == '__main__':

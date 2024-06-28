@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
 import pandas as pd
 import tabula
 from datetime import datetime
@@ -18,33 +19,30 @@ class deep_portal:
     def __init__(self):
         self.main_directory = r'C:\GNA\Data\Deep Portal'
         self.file_directory = r'C:\GNA\Data\Deep Portal\Downloaded Files'
+        self.clear_or_create_directory(self.file_directory)
         self.output_directory = r'C:\GNA\Data\Deep Portal\Edited xlsx Files'
+        self.clear_or_create_directory(self.output_directory)
         self.final_directory = r'C:\GNA\Data Upload'
-
         self.pdf_file_directory = r'C:\GNA\Data\Deep Portal\pdf Edited xlsx Files'
-        if not os.path.exists(self.pdf_file_directory):
-            os.makedirs(self.pdf_file_directory)
-
         self.output_pdf_directory = r'C:\GNA\Data\Deep Portal\pdf_file Edited xlsx Files'
-        if not os.path.exists(self.output_pdf_directory):
-            os.makedirs(self.output_pdf_directory)
         pass
 
-    def deep_portal_file_download(self):
-        if os.path.exists(self.file_directory):
-            for file in os.listdir(self.file_directory):
-                file_path_full = os.path.join(self.file_directory, file)
+    def clear_or_create_directory(selfself, directory):
+        if os.path.exists(directory):
+            for file in os.listdir(directory):
+                file_path_full = os.path.join(directory, file)
                 if os.path.isfile(file_path_full):
                     os.remove(file_path_full)
         else:
-            os.makedirs(self.file_directory)
+            os.makedirs(directory)
 
+    def deep_portal_file_download(self):
         options = Options()
         prefs = {'download.default_directory': self.file_directory}
         options.add_experimental_option('prefs', prefs)
         chromedriver_path = r'C:\Users\pulki\.cache\selenium\chromedriver\win64\125.0.6422.76\chromedriver.exe'
-        driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
-        # driver = webdriver.Chrome(options=options)
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=options)
 
         driver.get(
             'https://www.mstcecommerce.com/auctionhome/container.jsp?title_id=Rev.%20Auction%20Result&linkid=0&main_link=y&sublink=n&main_link_name=285&portal=ppa&homepage=index&arcDate=31-10-2021')
@@ -105,14 +103,6 @@ class deep_portal:
                 print(e)
 
     def edit_xlsx_file(self):
-        if os.path.exists(self.output_directory):
-            for file in os.listdir(self.output_directory):
-                file_path_full = os.path.join(self.output_directory, file)
-                if os.path.isfile(file_path_full):
-                    os.remove(file_path_full)
-        else:
-            os.makedirs(self.output_directory)
-
         xlsx_files = []
         for filename in os.listdir(self.file_directory):
             if filename.endswith('.xlsx'):
@@ -193,19 +183,22 @@ class deep_portal:
 
             # Rename Columns
             df.rename(columns={'Tender Details': 'Auction No.', 'Tender Name': 'Buyer',
-                'Requisition Details': 'Requisition No', 'Quantity Requisitioned': 'Buy Total Quantity (in MW)',
-                'Description_2': 'Delivery Start Date', 'Description_5': 'Delivery End Date',
-                'Description_3': 'Delivery Start Time', 'Description_6': 'Delivery End Time', 'Type(IPO/RA)': 'Type',
-                'Booking Quantity': 'Booking Quantity (in MW)', 'Allotted Quantity': 'Allocated Quantity (in MW)',
-                'Booking Amount': 'Booking Accepted Price (in Rs./kWh)',
-                'Accepted price': 'Accepted Price (in Rs./kWh)'}, inplace=True)
+                               'Requisition Details': 'Requisition No',
+                               'Quantity Requisitioned': 'Buy Total Quantity (in MW)',
+                               'Description_2': 'Delivery Start Date', 'Description_5': 'Delivery End Date',
+                               'Description_3': 'Delivery Start Time', 'Description_6': 'Delivery End Time',
+                               'Type(IPO/RA)': 'Type', 'Booking Quantity': 'Booking Quantity (in MW)',
+                               'Allotted Quantity': 'Allocated Quantity (in MW)',
+                               'Booking Amount': 'Booking Accepted Price (in Rs./kWh)',
+                               'Accepted price': 'Accepted Price (in Rs./kWh)'}, inplace=True)
 
             # Arrange Columns in Order
             column_to_move = ['Auction No.', 'Auction Initiation Date', 'Auction Initiation Time',
-                'Auction Result Date', 'Auction Result Time', 'Buyer', 'Requisition No', 'Delivery Start Date',
-                'Delivery End Date', 'Delivery Start Time', 'Delivery End Time', 'Type', 'Buy Total Quantity (in MW)',
-                'Booking Quantity (in MW)', 'Allocated Quantity (in MW)', 'Booking Accepted Price (in Rs./kWh)',
-                'Accepted Price (in Rs./kWh)']
+                              'Auction Result Date', 'Auction Result Time', 'Buyer', 'Requisition No',
+                              'Delivery Start Date', 'Delivery End Date', 'Delivery Start Time', 'Delivery End Time',
+                              'Type', 'Buy Total Quantity (in MW)', 'Booking Quantity (in MW)',
+                              'Allocated Quantity (in MW)', 'Booking Accepted Price (in Rs./kWh)',
+                              'Accepted Price (in Rs./kWh)']
             remaining_column_order = [col for col in df.columns if col not in column_to_move]
             column_order = column_to_move + remaining_column_order
             df = df[column_order]
@@ -296,19 +289,22 @@ class deep_portal:
 
             # Rename Columns
             df.rename(columns={'Tender Details': 'Auction No.', 'Tender Name': 'Buyer',
-                'Requisition Details': 'Requisition No', 'Quantity Requisitioned': 'Buy Total Quantity (in MW)',
-                'Description_2': 'Delivery Start Date', 'Description_5': 'Delivery End Date',
-                'Description_3': 'Delivery Start Time', 'Description_6': 'Delivery End Time', 'Type(IPO/RA)': 'Type',
-                'Booking Quantity': 'Booking Quantity (in MW)', 'Allotted Quantity': 'Allocated Quantity (in MW)',
-                'Booking Amount': 'Booking Accepted Price (in Rs./kWh)',
-                'Accepted price': 'Accepted Price (in Rs./kWh)'}, inplace=True)
+                               'Requisition Details': 'Requisition No',
+                               'Quantity Requisitioned': 'Buy Total Quantity (in MW)',
+                               'Description_2': 'Delivery Start Date', 'Description_5': 'Delivery End Date',
+                               'Description_3': 'Delivery Start Time', 'Description_6': 'Delivery End Time',
+                               'Type(IPO/RA)': 'Type', 'Booking Quantity': 'Booking Quantity (in MW)',
+                               'Allotted Quantity': 'Allocated Quantity (in MW)',
+                               'Booking Amount': 'Booking Accepted Price (in Rs./kWh)',
+                               'Accepted price': 'Accepted Price (in Rs./kWh)'}, inplace=True)
 
             # Arrange Columns in Order
             column_to_move = ['Auction No.', 'Auction Initiation Date', 'Auction Initiation Time',
-                'Auction Result Date', 'Auction Result Time', 'Buyer', 'Requisition No', 'Delivery Start Date',
-                'Delivery End Date', 'Delivery Start Time', 'Delivery End Time', 'Type', 'Buy Total Quantity (in MW)',
-                'Booking Quantity (in MW)', 'Allocated Quantity (in MW)', 'Booking Accepted Price (in Rs./kWh)',
-                'Accepted Price (in Rs./kWh)']
+                              'Auction Result Date', 'Auction Result Time', 'Buyer', 'Requisition No',
+                              'Delivery Start Date', 'Delivery End Date', 'Delivery Start Time', 'Delivery End Time',
+                              'Type', 'Buy Total Quantity (in MW)', 'Booking Quantity (in MW)',
+                              'Allocated Quantity (in MW)', 'Booking Accepted Price (in Rs./kWh)',
+                              'Accepted Price (in Rs./kWh)']
             remaining_column_order = [col for col in df.columns if col not in column_to_move]
             column_order = column_to_move + remaining_column_order
             df = df[column_order]
@@ -392,11 +388,14 @@ class deep_portal:
         df['Delivery Start Date'] = pd.to_datetime(df['Delivery Start Date']).dt.date
         df['Delivery End Date'] = pd.to_datetime(df['Delivery End Date']).dt.date
 
-        # Convert column in time format
+        # # Convert column in time format
         df['Auction Initiation Time'] = pd.to_datetime(df['Auction Initiation Time']).dt.time
         df['Auction Result Time'] = pd.to_datetime(df['Auction Result Time']).dt.time
         df['Delivery Start Time'] = pd.to_datetime(df['Delivery Start Time']).dt.time
         df['Delivery End Time'] = pd.to_datetime(df['Delivery End Time']).dt.time
+
+        df['duplicate'] = df.duplicated(keep=False).astype(int)
+        df['duplicate'] = df.groupby(list(df.columns[:-1])).cumcount() + df['duplicate']
 
         output_path = os.path.join(self.final_directory, 'deep_portal.xlsx')
         df.to_excel(output_path, index=False)
@@ -415,7 +414,7 @@ class deep_bulletin_board():
         self.deep_bulletin_board_directory = r'C:\GNA\Data\Deep Portal\Deep-e-bidding'
         if not os.path.exists(self.deep_bulletin_board_directory):
             os.makedirs(self.deep_bulletin_board_directory)
-            pass
+        pass
 
     def save_to_excel(self, table_data):
         today_date = datetime.now().strftime('%d-%m-%Y')
@@ -436,8 +435,8 @@ class deep_bulletin_board():
         prefs = {'download.default_directory': self.deep_bulletin_board_directory}
         options.add_experimental_option('prefs', prefs)
         chromedriver_path = r'C:\Users\pulki\.cache\selenium\chromedriver\win64\125.0.6422.76\chromedriver.exe'
-        driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
-        # driver = webdriver.Chrome(options=options)
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=options)
 
         driver.get('https://www.mstcecommerce.com/auctionhome/ppa/index.jsp')
         table = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'table-hover')))
@@ -456,8 +455,8 @@ class deep_bulletin_board():
 
 if __name__ == '__main__':
     bulletin_board_deep = deep_bulletin_board()
-    deep_data = deep_portal()
-
     bulletin_board_deep.bulletin_board()
+
+    deep_data = deep_portal()
     deep_data.get_data()
     pass

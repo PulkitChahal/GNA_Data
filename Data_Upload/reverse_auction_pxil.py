@@ -14,8 +14,9 @@ class pxil_reverse_auction():
         self.main_directory = r'C:\GNA\Data\Reverse Auction'
         self.final_directory = r'C:\GNA\Data Upload'
         self.file_directory = r"C:\GNA\Data\Reverse Auction\PXIL Reverse Auction"
+        self.clear_or_create_directory(self.file_directory)
         self.output_directory = r'C:\GNA\Data\Reverse Auction\PXIL Reverse Auction xlsx Files'
-        self.output_directory1 = r'C:\GNA\Data\Reverse Auction\PXIL Reverse Auction xlsx Files1'
+        self.clear_or_create_directory(self.output_directory)
         self.error_log_file = r'C:\GNA\Data\IEX Reverse Auction\error_log_pxil.xlsx'
         self.result_report_file = r"C:\GNA\Data\Reverse Auction\RAResultReport.xlsx"
 
@@ -24,9 +25,6 @@ class pxil_reverse_auction():
                                    'July': '07', 'Jul': '07', 'August': '08', 'Aug': '08', 'September': '09',
                                    'Sep': '09', 'October': '10', 'Oct': '10', 'November': '11', 'Nov': '11',
                                    'December': '12', 'Dec': '12'}
-
-        self.clear_or_create_directory(self.file_directory)
-        self.clear_or_create_directory(self.output_directory)
         pass
 
     def clear_or_create_directory(selfself, directory):
@@ -40,7 +38,7 @@ class pxil_reverse_auction():
 
     def links_for_data(self):
         base_date = datetime.now()
-        base_end_date = datetime.now() - timedelta(30)
+        base_end_date = datetime.now() - timedelta(5)
         base_date = base_date.strftime('%Y-%m-%d')
         base_end_date = base_end_date.strftime('%Y-%m-%d')
         print(base_date)

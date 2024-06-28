@@ -3,6 +3,8 @@ import os
 from itertools import combinations
 from fuzzywuzzy import fuzz
 from openpyxl import load_workbook
+
+import Data_Upload.data_mapping
 import data_mapping
 
 
@@ -27,7 +29,6 @@ class trader_combined:
         if 'Start Time (HH:MM)' in df.columns:
             df['Start Time (HH:MM)'] = df['Start Time (HH:MM)'].astype(str)
             df['End Time (HH:MM)'] = df['End Time (HH:MM)'].astype(str)
-
 
         # Iterate over merged cells and forward fill only those cells
         for merge in ws.merged_cells.ranges:
@@ -66,7 +67,7 @@ class trader_combined:
                             'Sale Price/Transaction Price (Rs/kwh)', 'Trading Margin (Rs/kwh)']
 
         # Remove unwanted characters
-        unwanted_chars = [' ', '*', ',', '^', '#', 'NIL', '•',"'",';']
+        unwanted_chars = [' ', '*', ',', '^', '#', 'NIL', '•', "'", ';']
         for char in unwanted_chars:
             df[columns_to_strip] = df[columns_to_strip].astype(str).apply(lambda x: x.str.replace(char, ''))
 
@@ -296,13 +297,93 @@ class trader_combined:
         df.to_excel(output_file, index=False)
         print(f'File saved {output_file}')
 
+    def entity_name_edit(self):
+        input_file = os.path.join(self.file_directory, 'trader_final5.xlsx')
+        df = pd.read_excel(input_file)
+
+        # Selecting the columns 'Name of Seller' and 'Name of Buyer'
+        entity_name = ['Name of Seller', 'Name of Buyer']
+        selected_columns = df.loc[:, entity_name]
+        print(selected_columns)
+
+        # Stacking the columns and finding unique values
+        unique_categories = selected_columns.stack().unique()
+        print(len(unique_categories))
+
+        # Function to find the best match for a given name
+        def find_best_match(name, choices, threshold=97):
+            best_match = name
+            highest_ratio = 0
+            for choice in choices:
+                ratio = fuzz.ratio(name, choice)
+                if ratio >= threshold and ratio > highest_ratio:
+                    best_match = choice
+                    highest_ratio = ratio
+            return best_match
+
+        # Replace values in the DataFrame, handling NaN values
+        for col in entity_name:
+            df[col] = df[col].fillna('').apply(lambda x: find_best_match(x, x) if x else x)
+
+        # Save the modified DataFrame to an Excel file
+        output_file = os.path.join(self.file_directory, 'trader_final6.xlsx')
+        df.to_excel(output_file, index=False)
+        print(f'File saved {output_file}')
+
+    def entity_name_edit1(self):
+        input_file = os.path.join(self.file_directory, 'trader_final6.xlsx')
+        df = pd.read_excel(input_file)
+
+        # Selecting the columns 'Name of Seller' and 'Name of Buyer'
+        entity_name = ['Name of Seller', 'Name of Buyer']
+        selected_columns = df.loc[:, entity_name]
+        print(selected_columns)
+
+        # Stacking the columns and finding unique values
+        unique_categories = selected_columns.stack().unique()
+        print(len(unique_categories))
+
+        # Function to find the best match for a given name
+        def find_best_match(name, choices, threshold=97):
+            best_match = name
+            highest_ratio = 0
+            for choice in choices:
+                ratio = fuzz.ratio(name, choice)
+                if ratio >= threshold and ratio > highest_ratio:
+                    best_match = choice
+                    highest_ratio = ratio
+            return best_match, highest_ratio
+
+        # Create new columns for the modified names and the fuzz ratio
+        for col in entity_name:
+            modified_names = []
+            fuzz_ratios = []
+
+            for name in df[col].fillna(''):
+                if name:
+                    best_match, ratio = find_best_match(name, name)
+                    modified_names.append(best_match)
+                    fuzz_ratios.append(ratio)
+                else:
+                    modified_names.append(name)
+                    fuzz_ratios.append('')
+
+            df[f'{col} Modified'] = modified_names
+            df[f'{col} Fuzz Ratio'] = fuzz_ratios
+
+        # Save the modified DataFrame to an Excel file
+        output_file = os.path.join(self.file_directory, 'trader_final7.xlsx')
+        df.to_excel(output_file, index=False)
+        print(f'File saved {output_file}')
+
 
 if __name__ == "__main__":
     trader_data = trader_combined()
-    trader_data.unmerge_columns()
-    trader_data.use_ffill_method()
-    trader_data.remove_unwanted_characters()
-    trader_data.correct_date_format()
-    trader_data.data_mapping_file()
-    trader_data.data_mapping_for_category()
+    # trader_data.unmerge_columns()
+    # trader_data.use_ffill_method()
+    # trader_data.remove_unwanted_characters()
+    # trader_data.correct_date_format()
+    # trader_data.data_mapping_file()
+    # trader_data.data_mapping_for_category()
+    trader_data.entity_name_edit1()
     pass
